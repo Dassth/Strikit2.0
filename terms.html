@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terms and Conditions for Strikit — Ultimate Sports Network. Read our comprehensive terms governing turf booking, user conduct, turf owner obligations, and enforcement policies.">
+  <meta name="keywords" content="Strikit, terms and conditions, turf booking, sports network, turf owner, booking policy, cancellation policy">
+  <meta name="author" content="Strikit — Ultimate Sports Network">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Terms & Conditions — Strikit">
+  <meta property="og:description" content="Comprehensive Terms and Conditions for the Strikit turf booking platform.">
+  <meta property="og:type" content="website">
+  <title>Terms & Conditions — Strikit | Ultimate Sports Network</title>
+  <link rel="icon" href="logo.jpeg" type="image/jpeg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-effects">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
+  <div class="bg-grid"></div>
+
+
+
+  <section class="hero">
+    <div class="hero-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+    <h1>Terms & Conditions</h1>
+    <p class="subtitle">Please read these terms carefully before using the Strikit platform. By accessing or using our services, you agree to be bound by these terms and all applicable laws and regulations.</p>
+    <div class="effective-date">
+      <span>Effective Date: May 16, 2026 &nbsp;|&nbsp; Last Updated: May 16, 2026</span>
+    </div>
+  </section>
+
+  <main class="main-container">
+    <aside class="sidebar">
+      <nav class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ul class="toc-list" id="toc-list"></ul>
+      </nav>
+    </aside>
+    <div class="content" id="content-area"></div>
+  </main>
+
+  <footer class="footer">
+    <img src="logo.jpeg" alt="Strikit" class="footer-logo">
+    <p><strong>Strikit — Ultimate Sports Network</strong></p>
+    <p>&copy; 2026 Strikit. All rights reserved.</p>
+    <p><a href="index.html">Home</a> &nbsp;|&nbsp; <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html">Terms & Conditions</a></p>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script src="terms-content.js"></script>
+  <script>
+    createNav('terms');
+    const tocList = document.getElementById('toc-list');
+    const contentArea = document.getElementById('content-area');
+
+    sections.forEach((s, i) => {
+      // TOC item
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#${s.id}"><span class="toc-num">${String(i+1).padStart(2,'0')}</span>${s.title.replace(/^\d+\.\s*/,'')}</a>`;
+      tocList.appendChild(li);
+
+      // Section
+      const div = document.createElement('section');
+      div.className = 'section';
+      div.id = s.id;
+      div.innerHTML = `<div class="section-header"><div class="section-icon">${s.icon}</div><h2>${s.title}</h2></div>${s.html}`;
+      contentArea.appendChild(div);
+    });
+
+    // Active TOC highlight on scroll
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sectionEls = document.querySelectorAll('.section');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sectionEls.forEach(s => observer.observe(s));
+
+
+  </script>
+</body>
+</html>

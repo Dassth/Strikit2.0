@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Privacy Policy for Strikit — Ultimate Sports Network. Learn how we collect, use, and protect your personal information on our turf booking platform.">
+  <title>Privacy Policy — Strikit | Ultimate Sports Network</title>
+  <link rel="icon" href="logo.jpeg" type="image/jpeg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-effects"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-orb bg-orb-3"></div></div>
+  <div class="bg-grid"></div>
+
+  <section class="hero">
+    <div class="hero-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <h1>Privacy Policy</h1>
+    <p class="subtitle">Your privacy is important to us. This policy explains how Strikit collects, uses, and safeguards your personal information across our platform.</p>
+    <div class="effective-date"><span>Effective Date: May 16, 2026 | Last Updated: May 16, 2026</span></div>
+  </section>
+
+  <main class="main-container">
+    <aside class="sidebar">
+      <nav class="toc">
+        <div class="toc-title">Table of Contents</div>
+        <ul class="toc-list" id="toc-list"></ul>
+      </nav>
+    </aside>
+    <div class="content" id="content-area"></div>
+  </main>
+
+  <footer class="footer">
+    <img src="logo.jpeg" alt="Strikit" class="footer-logo">
+    <p><strong>Strikit — Ultimate Sports Network</strong></p>
+    <p>&copy; 2026 Strikit. All rights reserved.</p>
+    <p><a href="terms.html">Terms & Conditions</a> &nbsp;|&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script src="privacy-content.js"></script>
+  <script>
+    createNav('privacy');
+    const tocList = document.getElementById('toc-list');
+    const contentArea = document.getElementById('content-area');
+    privacySections.forEach((s, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#${s.id}"><span class="toc-num">${String(i+1).padStart(2,'0')}</span>${s.title.replace(/^\d+\.\s*/,'')}</a>`;
+      tocList.appendChild(li);
+      const div = document.createElement('section');
+      div.className = 'section';
+      div.id = s.id;
+      div.innerHTML = `<div class="section-header"><div class="section-icon">${s.icon}</div><h2>${s.title}</h2></div>${s.html}`;
+      contentArea.appendChild(div);
+    });
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sectionEls = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sectionEls.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
