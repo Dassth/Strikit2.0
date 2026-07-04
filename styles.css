@@ -563,7 +563,7 @@ a img, .logo-area img {
   border-radius: 14px;
   margin: 0 auto 1.2rem;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
   border: 1px solid var(--border-active);
   box-shadow: 0 0 20px var(--green-glow);
 }
@@ -1419,7 +1419,7 @@ a img, .logo-area img {
   width: 50px;
   height: 50px;
   border-radius: 12px;
-  object-fit: contain;
+  object-fit: cover;
   border: 1px solid var(--border-active);
   box-shadow: 0 0 20px var(--green-glow);
   flex-shrink: 0;
