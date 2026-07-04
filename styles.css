@@ -40,6 +40,8 @@ body {
   line-height: 1.8;
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  caret-color: transparent;
 }
 
 /* Prevent image download on long press */
@@ -559,7 +561,9 @@ a img, .logo-area img {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+  display: block;
+  vertical-align: middle;
 }
 
 .footer p {
@@ -1272,6 +1276,86 @@ a img, .logo-area img {
 
 .mock-dashboard:hover .mock-chart .bar { opacity: 1; }
 
+/* Owner QR Wrapper */
+.owner-qr-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 18px;
+}
+
+.owner-qr-link {
+  display: block;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.owner-qr-link:hover {
+  transform: scale(1.05);
+}
+
+.owner-qr-img {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px;
+  border: 4px solid #final; /* white border for QR code readability */
+  border-color: #ffffff;
+  display: block;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.owner-qr-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.qr-scan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--green-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(0, 230, 118, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 230, 118, 0);
+  }
+}
+
+.qr-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem !important;
+  line-height: 1.4;
+}
+
 /* ===== CONTACT CARDS ===== */
 .contact-cards {
   display: grid;
@@ -1335,6 +1419,8 @@ a img, .logo-area img {
   border-radius: 10px;
   object-fit: cover;
   border: 1px solid var(--border-active);
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .footer-logo-text {
@@ -1442,5 +1528,14 @@ a img, .logo-area img {
   .footer-main { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem 2rem; }
   .owner-cta { padding: 2rem 1.5rem; }
   .owner-cta-content h2 { font-size: 1.5rem; }
+  .owner-qr-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.2rem;
+    padding: 1.5rem 1rem;
+  }
+  .owner-qr-details {
+    align-items: center;
+  }
 }
 
