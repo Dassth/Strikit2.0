@@ -558,16 +558,14 @@ a img, .logo-area img {
 }
 
 .footer-logo {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
   margin: 0 auto 1.2rem;
   display: block;
-  object-fit: cover;
-  object-position: center 35%;
-  border: 2px solid var(--border-active);
+  object-fit: contain;
+  border: 1px solid var(--border-active);
   box-shadow: 0 0 20px var(--green-glow);
-  background: var(--bg-primary);
 }
 
 .footer p {
