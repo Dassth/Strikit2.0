@@ -1411,25 +1411,27 @@ a img, .logo-area img {
 .footer-logo-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
 .footer-logo-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  object-fit: contain;
   border: 1px solid var(--border-active);
-  vertical-align: middle;
+  box-shadow: 0 0 20px var(--green-glow);
   flex-shrink: 0;
 }
 
 .footer-logo-text {
   font-family: 'Outfit', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 800;
+  letter-spacing: 2px;
   color: var(--text-primary);
+  line-height: 1;
 }
 
 .footer-logo-text span:last-child { color: var(--green-primary); }
