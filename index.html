@@ -277,18 +277,26 @@
     }, { threshold: 0.15 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    // Video autoplay helper for mobile/power saver
+    // Video: autoplay muted, unmute when visible, mute+pause when scrolled away
     const brandVideo = document.querySelector('.showcase-video');
     if (brandVideo) {
-      const playVideo = () => {
-        brandVideo.play().catch(() => {});
-        document.removeEventListener('click', playVideo);
-        document.removeEventListener('touchstart', playVideo);
-        document.removeEventListener('scroll', playVideo);
-      };
-      document.addEventListener('click', playVideo);
-      document.addEventListener('touchstart', playVideo);
-      document.addEventListener('scroll', playVideo);
+      let userInteracted = false;
+      const unlock = () => { userInteracted = true; document.removeEventListener('click', unlock); document.removeEventListener('touchstart', unlock); };
+      document.addEventListener('click', unlock);
+      document.addEventListener('touchstart', unlock);
+
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            brandVideo.play().catch(() => {});
+            if (userInteracted) brandVideo.muted = false;
+          } else {
+            brandVideo.muted = true;
+            brandVideo.pause();
+          }
+        });
+      }, { threshold: 0.4 });
+      videoObserver.observe(brandVideo);
     }
 
     // Counter animation for stats
