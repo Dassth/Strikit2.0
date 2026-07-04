@@ -1575,6 +1575,44 @@ a img, .logo-area img {
   display: block;
 }
 
+.video-unmute-btn {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid rgba(0, 255, 135, 0.5);
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  animation: unmutePulse 2s ease-in-out infinite;
+}
+
+.video-unmute-btn:hover {
+  background: rgba(0, 255, 135, 0.2);
+  border-color: var(--green-primary);
+}
+
+.video-unmute-btn.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) scale(0.8);
+}
+
+@keyframes unmutePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 135, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(0, 255, 135, 0); }
+}
+
 .showcase-content {
   display: flex;
   flex-direction: column;
