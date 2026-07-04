@@ -194,7 +194,10 @@
     <div class="home-section-inner">
       <div class="showcase-container">
         <div class="showcase-video-wrap fade-in">
-          <video src="Logo_on_t-shirt_and_QR_no_watermark.mp4" autoplay loop muted playsinline class="showcase-video"></video>
+          <video autoplay loop muted playsinline class="showcase-video">
+            <source src="Logo_on_t-shirt_and_QR_no_watermark.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="showcase-content fade-in">
           <div class="section-label">Brand Experience</div>
@@ -273,6 +276,20 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
     }, { threshold: 0.15 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Video autoplay helper for mobile/power saver
+    const brandVideo = document.querySelector('.showcase-video');
+    if (brandVideo) {
+      const playVideo = () => {
+        brandVideo.play().catch(() => {});
+        document.removeEventListener('click', playVideo);
+        document.removeEventListener('touchstart', playVideo);
+        document.removeEventListener('scroll', playVideo);
+      };
+      document.addEventListener('click', playVideo);
+      document.addEventListener('touchstart', playVideo);
+      document.addEventListener('scroll', playVideo);
+    }
 
     // Counter animation for stats
     const countObserver = new IntersectionObserver((entries) => {
