@@ -558,12 +558,14 @@ a img, .logo-area img {
 }
 
 .footer-logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  margin: 0 auto 1rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  margin: 0 auto 1.2rem;
   display: block;
-  vertical-align: middle;
+  object-fit: cover;
+  border: 2px solid var(--border-active);
+  box-shadow: 0 0 30px var(--green-glow), 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .footer p {
