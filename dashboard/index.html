@@ -138,6 +138,20 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Performance Comparison Chart -->
+                    <div class="chart-container glass-card mt-4">
+                        <div class="page-header" style="border: none; margin-bottom: 0; padding-bottom: 0;">
+                            <h2>Performance Comparison (This Month vs Last Month)</h2>
+                            <div class="tabs compact" id="comparison-tabs">
+                                <button class="tab-btn active" data-metric="revenue">Revenue</button>
+                                <button class="tab-btn" data-metric="bookings">Bookings</button>
+                            </div>
+                        </div>
+                        <div style="position: relative; height: 350px; width: 100%; margin-top: 15px;">
+                            <canvas id="comparison-chart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Bookings View -->

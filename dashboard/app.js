@@ -2,6 +2,8 @@ const API_BASE = 'https://bot.strikit.in/api/dashboard';
 let currentToken = localStorage.getItem('strikit_token');
 let currentOwner = JSON.parse(localStorage.getItem('strikit_owner') || 'null');
 let revenueChartInstance = null;
+let comparisonChartInstance = null;
+let comparisonData = null;
 
 // DOM Elements
 const views = {
@@ -138,7 +140,87 @@ const loadDashboardStats = async () => {
         const statusEl = document.getElementById('stat-active-status');
         statusEl.innerText = stats.activeStatus ? 'Active' : 'Inactive';
         statusEl.className = `stat-value ${stats.activeStatus ? 'status-active' : 'status-inactive'}`;
+        
+        await loadComparisonChart();
     } catch (e) { console.error('Failed to load stats'); }
+};
+
+const loadComparisonChart = async () => {
+    try {
+        comparisonData = await apiCall('/comparison');
+        renderComparisonChart('revenue');
+    } catch (e) {
+        console.error('Failed to load comparison data', e);
+    }
+};
+
+const renderComparisonChart = (metric) => {
+    const ctx = document.getElementById('comparison-chart').getContext('2d');
+    if (comparisonChartInstance) {
+        comparisonChartInstance.destroy();
+    }
+    
+    const datasets = {
+        revenue: {
+            thisMonth: comparisonData.revenue.thisMonth,
+            lastMonth: comparisonData.revenue.lastMonth,
+            labelSuffix: ' (INR)'
+        },
+        bookings: {
+            thisMonth: comparisonData.bookings.thisMonth,
+            lastMonth: comparisonData.bookings.lastMonth,
+            labelSuffix: ' Bookings'
+        }
+    };
+    
+    const activeData = datasets[metric];
+    
+    comparisonChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: comparisonData.labels,
+            datasets: [
+                {
+                    label: `This Month${activeData.labelSuffix}`,
+                    data: activeData.thisMonth,
+                    borderColor: '#00e676',
+                    backgroundColor: 'rgba(0, 230, 118, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: `Last Month${activeData.labelSuffix}`,
+                    data: activeData.lastMonth,
+                    borderColor: '#9ca3af',
+                    backgroundColor: 'rgba(156, 163, 175, 0.05)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    labels: { color: '#9ca3af' }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#9ca3af' }
+                },
+                y: {
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#9ca3af' }
+                }
+            }
+        }
+    });
 };
 
 const loadBookings = async () => {
@@ -322,6 +404,18 @@ const setupEventListeners = () => {
 
     // Bookings Filters
     document.getElementById('btn-filter-bookings').addEventListener('click', loadBookings);
+
+    // Comparison Tabs
+    document.querySelectorAll('#comparison-tabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#comparison-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            const metric = e.target.dataset.metric;
+            if (comparisonData) {
+                renderComparisonChart(metric);
+            }
+        });
+    });
     
     // Revenue Tabs
     document.querySelectorAll('#page-revenue .tab-btn').forEach(btn => {
