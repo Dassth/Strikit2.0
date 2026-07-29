@@ -399,8 +399,16 @@ const setupEventListeners = () => {
     });
 
     document.getElementById('btn-download-pdf').addEventListener('click', async () => {
+        const from = document.getElementById('revenue-from-date').value;
+        const to = document.getElementById('revenue-to-date').value;
+        let params = [];
+        if (from) params.push(`from_date=${from}`);
+        if (to) params.push(`to_date=${to}`);
+        let url = '/revenue/download';
+        if (params.length > 0) url += `?${params.join('&')}`;
+        
         try {
-            const blob = await apiCall('/revenue/download', { headers: { 'Accept': 'application/pdf' } });
+            const blob = await apiCall(url, { headers: { 'Accept': 'application/pdf' } });
             downloadBlob(blob, 'revenue_report.pdf');
         } catch (e) {}
     });
