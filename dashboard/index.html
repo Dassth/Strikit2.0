@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRIKIT Owner Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Overlay -->
+    <div id="global-loader" class="loader-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Login View -->
+    <section id="view-login" class="view active">
+        <div class="login-container glass-card">
+            <div class="login-header">
+                <img src="../logo.jpeg" alt="STRIKIT" class="logo" onerror="this.src='https://via.placeholder.com/150x50/00e676/0a0e1a?text=STRIKIT'">
+                <h2>Owner Dashboard</h2>
+                <p>Manage your turf bookings and revenue</p>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="login-view">View Only</button>
+                <button class="tab-btn" data-tab="login-edit">Edit Access</button>
+            </div>
+
+            <div class="tab-content active" id="login-view-content">
+                <form id="form-login-view">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="login-phone-view" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">View Dashboard</button>
+                </form>
+            </div>
+
+            <div class="tab-content" id="login-edit-content">
+                <form id="form-login-edit">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="login-phone-edit" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Login to Edit</button>
+                </form>
+                <div class="forgot-pwd">
+                    <a href="#" id="link-forgot-pwd">Forgot Password?</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard Layout -->
+    <section id="view-main" class="view hidden">
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <img src="../logo.jpeg" alt="STRIKIT" class="logo-small" onerror="this.src='https://via.placeholder.com/150x50/00e676/0a0e1a?text=STRIKIT'">
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="dashboard">
+                    <i class="fas fa-home"></i> <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-target="bookings">
+                    <i class="fas fa-calendar-alt"></i> <span>Bookings</span>
+                </a>
+                <a href="#" class="nav-item" data-target="revenue">
+                    <i class="fas fa-chart-line"></i> <span>Revenue</span>
+                </a>
+                <a href="#" class="nav-item" data-target="settings">
+                    <i class="fas fa-cog"></i> <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info" id="sidebar-user-info">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-details">
+                        <span id="user-name">Owner</span>
+                        <span id="user-role" class="badge badge-view">View Only</span>
+                    </div>
+                </div>
+                <button id="btn-logout" class="btn btn-outline w-100"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button id="btn-mobile-menu" class="mobile-only"><i class="fas fa-bars"></i></button>
+                <h2 id="page-title">Overview</h2>
+                <div class="topbar-actions">
+                    <span id="turf-name-header" class="turf-name">My Turf</span>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Dashboard Home -->
+                <div id="page-dashboard" class="page active">
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon"><i class="fas fa-ticket-alt"></i></div>
+                            <div class="stat-info">
+                                <h3>Today's Bookings</h3>
+                                <p id="stat-today-bookings" class="stat-value">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon"><i class="fas fa-rupee-sign"></i></div>
+                            <div class="stat-info">
+                                <h3>This Month Revenue</h3>
+                                <p id="stat-month-revenue" class="stat-value">₹0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Bookings</h3>
+                                <p id="stat-total-bookings" class="stat-value">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <h3>Status</h3>
+                                <p id="stat-active-status" class="stat-value status-active">Active</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookings View -->
+                <div id="page-bookings" class="page hidden">
+                    <div class="page-header">
+                        <div class="filters glass-card">
+                            <input type="date" id="filter-from-date" class="form-control">
+                            <span>to</span>
+                            <input type="date" id="filter-to-date" class="form-control">
+                            <button id="btn-filter-bookings" class="btn btn-secondary">Filter</button>
+                        </div>
+                        <button id="btn-download-csv" class="btn btn-primary"><i class="fas fa-file-csv"></i> Download CSV</button>
+                    </div>
+                    <div class="table-container glass-card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Team</th>
+                                    <th>Captain</th>
+                                    <th>Phone</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookings-table-body">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Revenue View -->
+                <div id="page-revenue" class="page hidden">
+                    <div class="page-header">
+                        <div class="tabs compact">
+                            <button class="tab-btn active" data-period="daily">Daily</button>
+                            <button class="tab-btn" data-period="weekly">Weekly</button>
+                            <button class="tab-btn" data-period="monthly">Monthly</button>
+                        </div>
+                        <button id="btn-download-pdf" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                    </div>
+                    
+                    <div class="revenue-summary-grid mb-4">
+                        <div class="stat-card glass-card">
+                            <div class="stat-info">
+                                <h3>Today</h3>
+                                <p id="rev-today" class="stat-value">₹0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-info">
+                                <h3>This Week</h3>
+                                <p id="rev-week" class="stat-value">₹0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-info">
+                                <h3>This Month</h3>
+                                <p id="rev-month" class="stat-value">₹0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container glass-card">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="page-settings" class="page hidden">
+                    <div id="settings-locked-msg" class="locked-message glass-card hidden">
+                        <i class="fas fa-lock"></i>
+                        <h3>Edit Access Required</h3>
+                        <p>You are logged in with View-Only access. Please login with your password to edit settings.</p>
+                        <button id="btn-relogin" class="btn btn-primary mt-2">Login to Edit</button>
+                    </div>
+
+                    <div id="settings-content" class="settings-grid">
+                        <div class="settings-card glass-card">
+                            <h3><i class="fas fa-futbol"></i> Turf Details</h3>
+                            <form id="form-turf-settings">
+                                <div class="form-group">
+                                    <label>Turf Name</label>
+                                    <input type="text" id="set-turf-name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location / Address</label>
+                                    <textarea id="set-address" rows="2" required></textarea>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Price (Weekday)</label>
+                                        <input type="number" id="set-price" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price (Weekend)</label>
+                                        <input type="number" id="set-weekend-price" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Opening Time</label>
+                                        <input type="time" id="set-open-time" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Closing Time</label>
+                                        <input type="time" id="set-close-time" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Save Turf Details</button>
+                            </form>
+                        </div>
+
+                        <div class="settings-column">
+                            <div class="settings-card glass-card mb-4">
+                                <h3><i class="fas fa-university"></i> Bank Details</h3>
+                                <form id="form-bank-settings">
+                                    <div class="form-group">
+                                        <label>Bank Name</label>
+                                        <input type="text" id="set-bank-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Account Name</label>
+                                        <input type="text" id="set-acc-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Account Number</label>
+                                        <input type="text" id="set-acc-number" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>IFSC Code</label>
+                                        <input type="text" id="set-ifsc" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Save Bank Details</button>
+                                </form>
+                            </div>
+
+                            <div class="settings-card glass-card">
+                                <h3><i class="fas fa-key"></i> Change Password</h3>
+                                <form id="form-change-password">
+                                    <div class="form-group">
+                                        <label>Current Password</label>
+                                        <input type="password" id="set-current-pwd" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <input type="password" id="set-new-pwd" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Update Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+
+    <!-- Forgot Password Modal -->
+    <div id="modal-forgot-pwd" class="modal hidden">
+        <div class="modal-content glass-card">
+            <button class="modal-close"><i class="fas fa-times"></i></button>
+            <div id="step-req-otp" class="modal-step active">
+                <h3>Reset Password</h3>
+                <p>Enter your phone number to receive an OTP via WhatsApp.</p>
+                <form id="form-req-otp">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" id="forgot-phone" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send OTP</button>
+                </form>
+            </div>
+            
+            <div id="step-verify-otp" class="modal-step hidden">
+                <h3>Verify OTP</h3>
+                <p>Enter the OTP sent to your WhatsApp and your new password.</p>
+                <form id="form-verify-otp">
+                    <div class="form-group">
+                        <label>OTP</label>
+                        <input type="text" id="forgot-otp" required>
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="forgot-new-pwd" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Reset Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
