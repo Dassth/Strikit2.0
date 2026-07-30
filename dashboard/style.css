@@ -508,7 +508,14 @@ input:focus, textarea:focus {
 
 .chart-container {
   padding: 1.5rem;
-  height: 400px;
+  height: auto;
+}
+
+.comparison-chart-wrapper, .revenue-chart-wrapper {
+  position: relative;
+  height: 350px;
+  width: 100%;
+  margin-top: 15px;
 }
 
 /* Settings View */
@@ -701,8 +708,10 @@ input:focus, textarea:focus {
     font-size: 1.5rem;
   }
   .chart-container {
-    height: 280px;
     padding: 0.75rem;
+  }
+  .comparison-chart-wrapper, .revenue-chart-wrapper {
+    height: 240px;
   }
   .login-container {
     padding: 1.5rem;
