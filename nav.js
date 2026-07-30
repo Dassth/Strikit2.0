@@ -11,6 +11,7 @@ function createNav(activePage) {
       <nav class="main-nav">
         <a href="index.html" class="nav-link ${activePage==='home'?'active':''}">Home</a>
         <a href="index.html#about" class="nav-link ${activePage==='about'?'active':''}">About Us</a>
+        <a href="dashboard/index.html" class="nav-link ${activePage==='dashboard'?'active':''}">Dashboard</a>
         <a href="privacy.html" class="nav-link ${activePage==='privacy'?'active':''}">Privacy Policy</a>
         <a href="terms.html" class="nav-link ${activePage==='terms'?'active':''}">Terms</a>
       </nav>
