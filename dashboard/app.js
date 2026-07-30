@@ -547,6 +547,14 @@ const setupEventListeners = () => {
             document.getElementById('form-verify-otp').reset();
         } catch (e) {}
     });
+
+    // Close sidebar on mobile when clicking content area
+    document.querySelector('.main-content').addEventListener('click', (e) => {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar.classList.contains('show') && !e.target.closest('#btn-mobile-menu')) {
+            sidebar.classList.remove('show');
+        }
+    });
 };
 
 
