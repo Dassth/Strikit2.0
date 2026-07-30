@@ -50,7 +50,7 @@ const apiCall = async (endpoint, options = {}) => {
             headers: { ...headers, ...options.headers }
         });
         
-        if (response.status === 401) {
+        if (response.status === 401 && endpoint !== '/login' && endpoint !== '/login-edit') {
             handleLogout();
             throw new Error('Session expired. Please login again.');
         }
@@ -58,7 +58,7 @@ const apiCall = async (endpoint, options = {}) => {
         const isJson = response.headers.get('content-type')?.includes('application/json');
         const data = isJson ? await response.json() : await response.blob();
         
-        if (!response.ok) throw new Error(data.message || 'API request failed');
+        if (!response.ok) throw new Error(data.detail || data.message || 'API request failed');
         return data;
     } catch (error) {
         showToast(error.message, 'error');
