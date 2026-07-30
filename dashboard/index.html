@@ -54,7 +54,10 @@
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" id="login-password" placeholder="Enter password" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" placeholder="Enter password" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Login to Edit</button>
                 </form>
@@ -304,11 +307,17 @@
                                 <form id="form-change-password">
                                     <div class="form-group">
                                         <label>Current Password</label>
-                                        <input type="password" id="set-current-pwd" required>
+                                        <div class="password-wrapper">
+                                            <input type="password" id="set-current-pwd" required>
+                                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label>New Password</label>
-                                        <input type="password" id="set-new-pwd" required>
+                                        <div class="password-wrapper">
+                                            <input type="password" id="set-new-pwd" required>
+                                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+                                        </div>
                                     </div>
                                     <button type="submit" class="btn btn-primary w-100">Update Password</button>
                                 </form>
@@ -348,7 +357,10 @@
                     </div>
                     <div class="form-group">
                         <label>New Password</label>
-                        <input type="password" id="forgot-new-pwd" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="forgot-new-pwd" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility"><i class="fas fa-eye"></i></button>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Reset Password</button>
                 </form>

@@ -150,6 +150,36 @@ input:focus, textarea:focus {
   box-shadow: 0 0 0 2px rgba(0, 230, 118, 0.1);
 }
 
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  padding-right: 2.75rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  outline: none;
+}
+
+.toggle-password:hover {
+  color: var(--green-primary);
+}
+
 .form-row {
   display: flex;
   gap: 1rem;

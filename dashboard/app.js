@@ -555,6 +555,25 @@ const setupEventListeners = () => {
             sidebar.classList.remove('show');
         }
     });
+
+    // Toggle Password Visibility
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const wrapper = e.currentTarget.closest('.password-wrapper');
+            const input = wrapper.querySelector('input');
+            const icon = e.currentTarget.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
 };
 
 
