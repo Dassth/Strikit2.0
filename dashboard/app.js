@@ -14,7 +14,8 @@ const pages = {
     dashboard: document.getElementById('page-dashboard'),
     bookings: document.getElementById('page-bookings'),
     revenue: document.getElementById('page-revenue'),
-    settings: document.getElementById('page-settings')
+    settings: document.getElementById('page-settings'),
+    admin: document.getElementById('page-admin')
 };
 
 // Utilities
@@ -103,6 +104,7 @@ const showPage = (pageName) => {
     if (pageName === 'bookings') loadBookings();
     if (pageName === 'revenue') loadRevenue('daily');
     if (pageName === 'settings') loadSettings();
+    if (pageName === 'admin') loadAdminData();
 };
 
 const updateUserInfo = () => {
@@ -126,6 +128,14 @@ const updateUserInfo = () => {
         settingsLockedMsg.classList.add('hidden');
         settingsContent.style.opacity = '1';
         settingsContent.style.pointerEvents = 'auto';
+    }
+
+    // Toggle Admin sidebar visibility
+    const adminNavItem = document.getElementById('nav-item-admin');
+    if (currentOwner.isAdmin) {
+        adminNavItem.classList.remove('hidden');
+    } else {
+        adminNavItem.classList.add('hidden');
     }
 };
 
@@ -547,6 +557,159 @@ const setupEventListeners = () => {
             document.getElementById('form-verify-otp').reset();
         } catch (e) {}
     });
+};
+
+const loadAdminData = async () => {
+    try {
+        showLoader();
+        await Promise.all([
+            loadAdminStats(),
+            loadAdminOwners(),
+            loadAdminPayouts()
+        ]);
+    } catch (e) {
+        showToast('Failed to load admin dashboard data', 'error');
+    } finally {
+        hideLoader();
+    }
+};
+
+const loadAdminStats = async () => {
+    try {
+        const stats = await apiCall('/admin/stats');
+        document.getElementById('admin-stat-active-turfs').innerText = stats.activeTurfs || 0;
+        document.getElementById('admin-stat-pending').innerText = stats.pendingVerifications || 0;
+        document.getElementById('admin-stat-failed-payouts').innerText = stats.failedPayouts || 0;
+        document.getElementById('admin-stat-revenue').innerText = formatMoney(stats.totalRevenue || 0);
+    } catch (e) {
+        console.error('Failed to load admin stats', e);
+    }
+};
+
+const loadAdminOwners = async () => {
+    try {
+        const owners = await apiCall('/admin/owners');
+        const tbody = document.getElementById('admin-owners-table-body');
+        tbody.innerHTML = '';
+        
+        if (owners.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">No turf owners registered</td></tr>';
+            return;
+        }
+        
+        owners.forEach(o => {
+            const tr = document.createElement('tr');
+            
+            const isVerified = o.verified ? '<span class="status-badge status-confirmed">Verified</span>' : '<span class="status-badge status-cancelled">Pending Verification</span>';
+            const isSubActive = o.subscriptionActive ? '<span class="status-badge status-confirmed">Active</span>' : '<span class="status-badge status-cancelled">Expired</span>';
+            
+            let actionBtn = '';
+            if (!o.verified) {
+                actionBtn = `<button class="btn btn-primary btn-sm" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; margin-right: 0.5rem;" onclick="handleApproveOwner(${o.id})">Approve</button>`;
+            }
+            actionBtn += `<button class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; background: rgba(255, 77, 79, 0.2); color: #ff4d4f;" onclick="handleRejectOwner(${o.id})">Block</button>`;
+            
+            tr.innerHTML = `
+                <td>${o.name}</td>
+                <td>${o.turfName}</td>
+                <td>${o.mobile}</td>
+                <td>${o.createdAt || 'N/A'}</td>
+                <td>${isVerified}</td>
+                <td>${isSubActive}</td>
+                <td>${actionBtn}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error('Failed to load admin owners', e);
+    }
+};
+
+const loadAdminPayouts = async () => {
+    try {
+        const payouts = await apiCall('/admin/payouts');
+        const tbody = document.getElementById('admin-payouts-table-body');
+        tbody.innerHTML = '';
+        
+        if (payouts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">No payouts recorded</td></tr>';
+            return;
+        }
+        
+        payouts.forEach(p => {
+            const tr = document.createElement('tr');
+            
+            let statusClass = 'status-pending';
+            if (p.status === 'COMPLETED') statusClass = 'status-confirmed';
+            if (p.status === 'FAILED') statusClass = 'status-cancelled';
+            
+            const statusBadge = `<span class="status-badge ${statusClass}">${p.status}</span>`;
+            
+            let actionBtn = '';
+            if (p.status === 'FAILED') {
+                actionBtn = `
+                    <button class="btn btn-primary btn-sm" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; margin-right: 0.5rem;" onclick="handleRetryPayout(${p.id})">Retry</button>
+                    <button class="btn btn-secondary btn-sm" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;" onclick="handleSettlePayout(${p.id})">Settle Manually</button>
+                `;
+            } else {
+                actionBtn = '<span style="color: var(--text-secondary);">No Action</span>';
+            }
+            
+            tr.innerHTML = `
+                <td>${p.createdAt || 'N/A'}</td>
+                <td>${p.turfName}</td>
+                <td>₹${p.totalPaid}</td>
+                <td>₹${p.ownerShare}</td>
+                <td>₹${p.platformFee}</td>
+                <td>${statusBadge}</td>
+                <td>${actionBtn}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error('Failed to load admin payouts', e);
+    }
+};
+
+// Global click handlers for Admin view
+window.handleApproveOwner = async (ownerId) => {
+    if (!confirm('Are you sure you want to approve this owner?')) return;
+    try {
+        showLoader();
+        await apiCall(`/admin/owners/${ownerId}/approve`, { method: 'POST' });
+        showToast('Owner approved successfully!');
+        loadAdminData();
+    } catch (e) {} finally { hideLoader(); }
+};
+
+window.handleRejectOwner = async (ownerId) => {
+    if (!confirm('Are you sure you want to reject/block this owner?')) return;
+    try {
+        showLoader();
+        await apiCall(`/admin/owners/${ownerId}/reject`, { method: 'POST' });
+        showToast('Owner blocked successfully.');
+        loadAdminData();
+    } catch (e) {} finally { hideLoader(); }
+};
+
+window.handleRetryPayout = async (payoutId) => {
+    if (!confirm('Retry this failed payout?')) return;
+    try {
+        showLoader();
+        await apiCall(`/admin/payouts/${payoutId}/retry`, { method: 'POST' });
+        showToast('Payout retry initiated!');
+        loadAdminData();
+    } catch (e) {} finally { hideLoader(); }
+};
+
+window.handleSettlePayout = async (payoutId) => {
+    if (!confirm('Mark this payout as settled manually via UPI/GPay?')) return;
+    try {
+        showLoader();
+        await apiCall(`/admin/payouts/${payoutId}/settle`, { method: 'POST' });
+        showToast('Payout settled manually.');
+        loadAdminData();
+    } catch (e) {} finally { hideLoader(); }
 };
 
 const downloadBlob = (blob, filename) => {
